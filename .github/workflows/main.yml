@@ -8,7 +8,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  test:
+  build_and_test:
     name: Test
     runs-on: ubuntu-latest
     steps:
