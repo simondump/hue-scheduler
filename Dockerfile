@@ -1,12 +1,13 @@
-FROM --platform=$BUILDPLATFORM rust:1.74 AS build
+FROM rust:1.74 AS build
 
-WORKDIR /app
+WORKDIR /usr/src/hue-scheduler
 
 COPY . .
-RUN cargo build --release
 
-FROM alpine:3.18
+RUN cargo build --release --locked
 
-COPY --from=build /app/target/release/hue-scheduler /usr/local/bin/hue-scheduler
+FROM debian:12.2-slim
+
+COPY --from=build /usr/src/hue-scheduler/target/release/hue-scheduler /bin/hue-scheduler
 
 CMD ["hue-scheduler"]
