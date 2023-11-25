@@ -67,6 +67,6 @@ jobs:
         env:
           IMAGE_PATH: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_VERSION: ${{ github.ref_name }}
-          IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.version }}
+          IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.value }}
         run: |
           bash +x builder/build.sh
