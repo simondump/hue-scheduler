@@ -33,7 +33,7 @@ jobs:
 #        run: cargo test --verbose
 
   build_docker:
-#    if: startsWith(github.event.ref, 'refs/tags/v')
+    if: startsWith(github.event.ref, 'refs/tags/v')
 #    needs: build_and_test
     runs-on: ubuntu-latest
     permissions:
