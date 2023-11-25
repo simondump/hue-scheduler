@@ -82,5 +82,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ matrix.platform }}
           build-args: |
-            BASE_IMAGE: ${{ matrix.image }}
-            TARGET_PLATFORM: ${{ matrix.platform }}
+            BASE_IMAGE=${{ matrix.image }}
+            TARGET_PLATFORM=${{ matrix.platform }}
