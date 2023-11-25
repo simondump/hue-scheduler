@@ -44,11 +44,11 @@ jobs:
         include:
           - platform: linux/amd64
             target: x86_64-unknown-linux-musl
-            image: ghcr.io/gngpp/rust-musl-cross:x86_64-musl
+            image: ghcr.io/rust-cross/rust-musl-cross:x86_64-musl
           - platform: linux/arm64
             target: aarch64-unknown-linux-musl
-            image: ghcr.io/gngpp/rust-musl-cross:aarch64-musl
-    name: Build and push Docker image for ${{ matrix.platform }}
+            image: ghcr.io/rust-cross/rust-musl-cross:aarch64-musl
+    name: Build image for ${{ matrix.platform }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
