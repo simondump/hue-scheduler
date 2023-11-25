@@ -34,12 +34,19 @@ jobs:
 
   build_docker:
     if: startsWith(github.event.ref, 'refs/tags/v')
-    name: Build and publish docker images
     needs: build_and_test
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            image: x86_64-unknown-linux-musl
+          - platform: linux/arm64
+            image: aarch64-unknown-linux-musl
+    name: Build and push Docker image for ${{ matrix.platform }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -73,4 +80,7 @@ jobs:
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            BASE_IMAGE: ${{ matrix.image }}
+            TARGET_PLATFORM: ${{ matrix.platform }}
