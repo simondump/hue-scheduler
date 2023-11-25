@@ -1,5 +1,4 @@
 ARG TARGET_PLATFORM
-ARG TARGET_CARGO
 ARG BASE_IMAGE
 
 FROM --platform=$BUILDPLATFORM $BASE_IMAGE AS build
@@ -14,7 +13,7 @@ RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ]; then \
 
 COPY . .
 
-RUN cargo build --target "$TARGET_CARGO" --release --locked
+RUN cargo build --release --locked
 
 FROM debian:12.2-slim
 
