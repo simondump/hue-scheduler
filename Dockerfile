@@ -14,6 +14,8 @@ RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ]; then \
 COPY . .
 
 RUN cargo build --release --locked
+RUN ls -la target
+RUN ls -la target/release
 
 FROM debian:12.2-slim
 
