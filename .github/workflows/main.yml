@@ -69,4 +69,15 @@ jobs:
           IMAGE_VERSION: ${{ github.ref_name }}
           IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.value }}
         run: |
-          bash +x builder/build.sh
+          targets=("x86_64-unknown-linux-musl" "aarch64-unknown-linux-musl")
+  
+          for target in "${targets[@]}"; do
+            docker buildx build \
+              --file builder/Dockerfile \
+              --tag "$IMAGE_PATH:latest" \
+              --tag "$IMAGE_PATH:$IMAGE_VERSION" \
+              --tag "$IMAGE_PATH:$IMAGE_VERSION_SHORT" \
+              --build-arg BASE="ghcr.io/rust-cross/rust-musl-cross:$target" \
+              --build-arg TARGET="$target" \
+              . --push
+          done
