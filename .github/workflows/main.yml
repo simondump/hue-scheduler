@@ -57,9 +57,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Create short version name
+        id: short_version
+        run: echo "${{ github.ref_name }}" | sed 's/\.[0-9]*$//g'
+
       - name: Build and push Docker images
         env:
           IMAGE_PATH: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_VERSION: ${{ github.ref_name }}
+          IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.stdout }}
         run: |
           bash +x builder/build.sh
