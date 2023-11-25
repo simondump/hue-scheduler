@@ -15,10 +15,13 @@ COPY . .
 
 RUN cargo build --release --locked
 RUN ls -la target
-RUN ls -la target/release
 
 FROM debian:12.2-slim
 
-COPY --from=build /usr/src/hue-scheduler/target/release/hue-scheduler /bin/hue-scheduler
+ARG TARGET_CARGO
+
+COPY --from=build \
+    "/usr/src/hue-scheduler/target/release/$TARGET_CARGO/hue-scheduler" \
+    "/bin/hue-scheduler"
 
 CMD ["hue-scheduler"]
