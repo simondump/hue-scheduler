@@ -59,12 +59,14 @@ jobs:
 
       - name: Create short version name
         id: short_version
-        run: echo "${{ github.ref_name }}" | sed 's/\.[0-9]*$//g'
+        run: |
+          version=$(echo "${{ github.ref_name }}" | sed 's/\.[0-9]*$//g')
+          echo "value=$version" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker images
         env:
           IMAGE_PATH: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_VERSION: ${{ github.ref_name }}
-          IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.stdout }}
+          IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.version }}
         run: |
           bash +x builder/build.sh
