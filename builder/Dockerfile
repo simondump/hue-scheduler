@@ -1,8 +1,8 @@
 ARG TARGETPLATFORM
-ARG TARGETCARGO
-ARG BASEIMAGE
+ARG TARGET
+ARG BASE
 
-FROM --platform=$BUILDPLATFORM $BASEIMAGE AS build
+FROM --platform=$BUILDPLATFORM $BASE AS build
 
 WORKDIR /usr/src/hue-scheduler
 
@@ -18,10 +18,13 @@ RUN cargo build --release --locked
 
 FROM debian:12.2-slim
 
-ARG TARGETCARGO
+LABEL org.opencontainers.image.authors "Simon Reinisch <simon@reinisch.io>"
+LABEL org.opencontainers.image.source https://github.com/simondump/hue-scheduler
+
+ARG TARGET
 
 COPY --from=build \
-    "/usr/src/hue-scheduler/target/$TARGETCARGO/release/hue-scheduler" \
+    "/usr/src/hue-scheduler/target/$TARGET/release/hue-scheduler" \
     "/bin/hue-scheduler"
 
 CMD ["hue-scheduler"]
