@@ -39,7 +39,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    name: Build image for ${{ matrix.platform }}
+    name: Build and push Docker images
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,5 +68,4 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          cd builder
-          bash +x build.sh
+          bash +x builder/build.sh
