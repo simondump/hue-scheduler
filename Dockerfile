@@ -1,10 +1,8 @@
-ARG BASE_IMAGE
-
-FROM --platform=$BUILDPLATFORM $BASE_IMAGE
-
 ARG TARGET_PLATFORM
 ARG TARGET_CARGO
 ARG BASE_IMAGE
+
+FROM --platform=$BUILDPLATFORM $BASE_IMAGE
 
 WORKDIR /usr/src/hue-scheduler
 
@@ -12,7 +10,7 @@ RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ]; then \
       apt update -y && apt install -y gcc-aarch64-linux-gnu; \
     elif [ "${TARGET_PLATFORM}" = "linux/amd64" ]; then \
       apt update -y && apt install -y gcc-multilib; \
-    fi \
+    fi
 
 COPY . .
 
