@@ -6,7 +6,9 @@ for target in "${targets[@]}"; do
   tag="ghcr.io/simondump/hue-scheduler:$target"
   base="ghcr.io/rust-cross/rust-musl-cross:$target"
 
-  docker buildx build --platform linux/amd64 \
+  docker buildx build \
+    --file builder/Dockerfile \
+    --platform linux/amd64 \
     --tag "$tag" \
     --build-arg BASE="$base" \
     --build-arg TARGET="$target" \. --push
