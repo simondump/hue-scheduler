@@ -1,4 +1,5 @@
 ARG TARGET_PLATFORM
+ARG TARGET_CARGO
 ARG BASE_IMAGE
 
 FROM --platform=$BUILDPLATFORM $BASE_IMAGE AS build
@@ -14,10 +15,11 @@ RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ]; then \
 COPY . .
 
 RUN cargo build --release --locked
+RUN ls -la target
+RUN ls -la target/release
+RUN ls -la "target/$TARGET_CARGO"
 
 FROM debian:12.2-slim
-
-ARG TARGET_CARGO
 
 COPY --from=build \
     "/usr/src/hue-scheduler/target/$TARGET_CARGO/hue-scheduler" \
