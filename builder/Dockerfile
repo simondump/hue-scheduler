@@ -18,9 +18,6 @@ RUN cargo build --release --locked
 
 FROM debian:12.2-slim
 
-LABEL org.opencontainers.image.authors "Simon Reinisch <simon@reinisch.io>"
-LABEL org.opencontainers.image.source "https://github.com/simondump/hue-scheduler"
-
 ARG TARGET
 
 COPY --from=build \
