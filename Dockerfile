@@ -1,32 +1,21 @@
-ARG TARGET_PLATFORM
-ARG TARGET_CARGO
-ARG BASE_IMAGE
-
-FROM --platform=$BUILDPLATFORM $BASE_IMAGE AS build
+FROM --platform=$BUILDPLATFORM $BASE AS build
 
 WORKDIR /usr/src/hue-scheduler
-
-RUN if [ "${TARGET_PLATFORM}" = "linux/arm64" ]; then \
-      apt update -y && apt install -y gcc-aarch64-linux-gnu; \
-    elif [ "${TARGET_PLATFORM}" = "linux/amd64" ]; then \
-      apt update -y && apt install -y gcc-multilib; \
-    fi
 
 COPY . .
 
 RUN cargo build --release --locked
-RUN ls -la target
-RUN ls -la target/release
-RUN echo "target/$TARGET_CARGO"
-RUN ls -la "target/$TARGET_CARGO"
-RUN ls -la "target/$TARGET_CARGO/release"
 
 FROM debian:12.2-slim
 
-ARG TARGET_CARGO
+LABEL org.opencontainers.image.authors "Simon Reinisch <simon@reinisch.io>"
+LABEL org.opencontainers.image.description "Better scheduling for your Philips Hue lights"
+LABEL org.opencontainers.image.source https://github.com/simondump/hue-scheduler
+
+ARG TARGET
 
 COPY --from=build \
-    "/usr/src/hue-scheduler/target/$TARGET_CARGO/release/hue-scheduler" \
+    "/usr/src/hue-scheduler/target/$TARGET/release/hue-scheduler" \
     "/bin/hue-scheduler"
 
 CMD ["hue-scheduler"]
