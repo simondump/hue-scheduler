@@ -8,33 +8,8 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-#  build_and_test:
-#    name: Build and test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Set up cache
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#            ~/.cargo/bin/
-#            ~/.cargo/registry/index/
-#            ~/.cargo/registry/cache/
-#            ~/.cargo/git/db/
-#            target/
-#          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-#
-#      - name: Build
-#        run: cargo build --locked --verbose
-#
-#      - name: Run tests
-#        run: cargo test --verbose
-
   build_docker:
     if: startsWith(github.event.ref, 'refs/tags/v')
-#    needs: build_and_test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -83,7 +58,6 @@ jobs:
         run: |
           docker buildx build \
             --platform "$IMAGE_PLATFORM" \
-            --file builder/Dockerfile \
             --tag "$IMAGE_PATH:latest" \
             --tag "$IMAGE_PATH:$IMAGE_VERSION" \
             --tag "$IMAGE_PATH:$IMAGE_VERSION_SHORT" \
