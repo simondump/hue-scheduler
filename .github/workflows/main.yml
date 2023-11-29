@@ -39,7 +39,14 @@ jobs:
     permissions:
       contents: read
       packages: write
-    name: Build and push Docker images
+    name: Build docker (${{ matrix.target }})
+    strategy:
+      matrix:
+        include:
+          - target: x86_64
+            base: x86_64-unknown-linux-musl
+          - target: aarch64
+            base: aarch64-unknown-linux-musl
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -65,19 +72,16 @@ jobs:
 
       - name: Build and push Docker images
         env:
+          IMAGE_BASE: ${{ matrix.base }}
           IMAGE_PATH: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_VERSION: ${{ github.ref_name }}
           IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.value }}
         run: |
-          targets=("x86_64-unknown-linux-musl" "aarch64-unknown-linux-musl")
-  
-          for target in "${targets[@]}"; do
-            docker buildx build \
-              --file builder/Dockerfile \
-              --tag "$IMAGE_PATH:latest" \
-              --tag "$IMAGE_PATH:$IMAGE_VERSION" \
-              --tag "$IMAGE_PATH:$IMAGE_VERSION_SHORT" \
-              --build-arg BASE="ghcr.io/rust-cross/rust-musl-cross:$target" \
-              --build-arg TARGET="$target" \
-              . --push
-          done
+          docker buildx build \
+            --file builder/Dockerfile \
+            --tag "$IMAGE_PATH:latest" \
+            --tag "$IMAGE_PATH:$IMAGE_VERSION" \
+            --tag "$IMAGE_PATH:$IMAGE_VERSION_SHORT" \
+            --build-arg BASE="ghcr.io/rust-cross/rust-musl-cross:$IMAGE_BASE" \
+            --build-arg TARGET="$IMAGE_BASE" \
+            . --push
