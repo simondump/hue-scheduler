@@ -76,6 +76,7 @@ jobs:
           IMAGE_PATH: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_VERSION: ${{ github.ref_name }}
           IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.value }}
+          BUILDX_NO_DEFAULT_ATTESTATIONS: true
         run: |
           docker buildx build \
             --file builder/Dockerfile \
