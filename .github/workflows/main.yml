@@ -45,8 +45,10 @@ jobs:
         include:
           - target: x86_64
             base: x86_64-unknown-linux-musl
+            platform: linux/amd64
           - target: aarch64
             base: aarch64-unknown-linux-musl
+            platform: linux/arm64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -76,9 +78,11 @@ jobs:
           IMAGE_PATH: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           IMAGE_VERSION: ${{ github.ref_name }}
           IMAGE_VERSION_SHORT: ${{ steps.short_version.outputs.value }}
+          IMAGE_PLATFORM: ${{ matrix.platform }}
           BUILDX_NO_DEFAULT_ATTESTATIONS: true
         run: |
           docker buildx build \
+            --platform "$IMAGE_PLATFORM" \
             --file builder/Dockerfile \
             --tag "$IMAGE_PATH:latest" \
             --tag "$IMAGE_PATH:$IMAGE_VERSION" \
