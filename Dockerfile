@@ -1,3 +1,5 @@
+ARG BASE
+
 FROM --platform=$BUILDPLATFORM $BASE AS build
 
 WORKDIR /usr/src/hue-scheduler
