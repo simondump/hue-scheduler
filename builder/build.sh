@@ -9,12 +9,11 @@ for I in "${!BASE_IMAGES[@]}"; do
   BASE_IMAGE="${BASE_IMAGES[$I]}"
 
   docker buildx build \
-    --file ../Dockerfile \
     --platform "$IMAGE_PLATFORM" \
     --tag "$IMAGE_PATH:latest" \
     --tag "$IMAGE_PATH:$IMAGE_VERSION" \
     --tag "$IMAGE_PATH:$IMAGE_VERSION_SHORT" \
     --build-arg BASE="ghcr.io/rust-cross/rust-musl-cross:$BASE_IMAGE" \
     --build-arg TARGET="$BASE_IMAGE" \
-    --push
+    . --push
 done
