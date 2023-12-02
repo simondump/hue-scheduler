@@ -9,7 +9,7 @@ for I in "${!BASE_IMAGES[@]}"; do
   BASE_IMAGE="${BASE_IMAGES[$I]}"
 
   docker buildx build \
-    --platform "$IMAGE_PLATFORM" \
+    --platform linux/amd64,linux/arm64 \
     --tag "$IMAGE_PATH:latest" \
     --tag "$IMAGE_PATH:$IMAGE_VERSION" \
     --tag "$IMAGE_PATH:$IMAGE_VERSION_SHORT" \
