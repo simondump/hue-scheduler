@@ -8,7 +8,7 @@ for I in "${!BASE_IMAGES[@]}"; do
   IMAGE_PLATFORM="${IMAGE_PLATFORMS[$I]}"
   BASE_IMAGE="${BASE_IMAGES[$I]}"
 
-  docker build \
+  docker buildx build \
     --file ../Dockerfile \
     --platform "$IMAGE_PLATFORM" \
     --tag "$IMAGE_PATH:latest" \
